@@ -59,6 +59,23 @@ else:
 
 if (filter != ""):
     if (filterSelectBox == ">"):
-        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] > int(filter)]) # cara filter
-    # TODO: lanjutkan code di atas
-    # note: cara filter ada di modul
+        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] > int(filter)])
+    elif (filterSelectBox == "<"):
+        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] < int(filter)])
+    elif (filterSelectBox == "="):
+        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] == int(filter)])
+    elif (filterSelectBox == ">="):
+        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] >= int(filter)])
+    elif (filterSelectBox == "<="):
+        st.table(em.getDataFrame()[em.getDataFrame()[targetFilterColumn] <= int(filter)])
+    if (choice == "Insert"):    
+        if (st.button("Insert")):
+            if (sum([1 for i in newNim if str(i).isalpha()]) > 0): st.error("Input nim harus angka semua")
+            elif (sum([1 for i in newName if str(i).isdigit()]) > 0): st.error("Input nama harus Alphabet semua")
+            elif (sum([1 for i in newGrade if str(i).isalpha()]) > 0): st.error("Input nilai harus angka semua")
+            else:
+                if (em.getData("NIM",newNim)): st.error("Nim already exist")
+                else:
+                    em.insertData({"NIM":str(newNim).strip(),"Nama":str(newName).strip(),"Nilai":int(newGrade.strip())},saveChange)
+                    if (em.getData("NIM",newNim)): st.success("inserted")
+                    else: st.error("insert fail")
